@@ -11,7 +11,8 @@ import { useChatStore } from "../store/useChatStore";
 const mouseClickSound = new Audio("/sounds/mouse-click.mp3");
 
 function ProfileHeader() {
-  const { logout, authUser, updateProfile, isProfileUploading } = useAuthStore();
+  const { logout, authUser, updateProfile, isProfileUploading } =
+    useAuthStore();
   const { isSoundEnabled, toggleSound } = useChatStore();
   const [selectedImg, setSelectedImg] = useState(null);
 
@@ -21,7 +22,7 @@ function ProfileHeader() {
     const file = e.target.files[0];
     if (!file) return;
 
-    const MAX_FILE_SIZE = 5 * 1024 * 1024; 
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;
     if (file.size > MAX_FILE_SIZE) {
       toast.error("Image file is too large! Maximum allowed size is 5MB.");
       return;
@@ -52,7 +53,7 @@ function ProfileHeader() {
           <div className="avatar online">
             <button
               type="button"
-              className="size-14 rounded-full overflow-hidden relative group disabled:cursor-not-allowed"
+              className="size-14 rounded-full overflow-hidden relative group/avatar disabled:cursor-not-allowed"
               onClick={() => fileInputRef.current.click()}
               disabled={isProfileUploading}
             >
@@ -67,7 +68,8 @@ function ProfileHeader() {
                   <Loader2Icon className="size-5 text-white animate-spin" />
                 </div>
               ) : (
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/avatar:opacity-100 flex items-center justify-center transition-opacity">
+                  {" "}
                   <span className="text-white text-xs">Change</span>
                 </div>
               )}
