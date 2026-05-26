@@ -1,3 +1,4 @@
+// import dns from "node:dns"; dns.setServers(["1.1.1.1", "8.8.8.8"]); 
 import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
@@ -22,6 +23,11 @@ app.set("trust proxy", true);
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
+// 🟢 HEALTH ROUTE
+app.get("/api/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
 // make ready for deployment
 if (ENV.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
@@ -35,3 +41,4 @@ server.listen(PORT, () => {
   console.log("Server running on port: " + PORT);
   connectDB();
 });
+ 
