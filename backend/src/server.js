@@ -1,4 +1,4 @@
-// import dns from "node:dns"; dns.setServers(["1.1.1.1", "8.8.8.8"]); 
+// import dns from "node:dns"; dns.setServers(["1.1.1.1", "8.8.8.8"]); // Uncomment it before running in lcoal
 import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
@@ -19,6 +19,25 @@ app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 app.use(cookieParser());
 
 app.set("trust proxy", true);
+
+app.use((req, res, next) => {
+  const userAgent = req.headers["user-agent"] || "";
+  const isBot =
+    userAgent.includes("Uptrends") || userAgent.includes("UptimeRobot");
+
+  // If it's the bot, ONLY let it hit the tiny health route
+  if (isBot) {
+    if (req.path === "/api/health") {
+      return next(); // Let it through to return "OK"
+    } else {
+      // If the bot tries to load your HTML, CSS, or JS, destroy the connection!
+      req.socket.destroy();
+      return;
+    }
+  }
+
+  next();
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
@@ -41,4 +60,3 @@ server.listen(PORT, () => {
   console.log("Server running on port: " + PORT);
   connectDB();
 });
- 
